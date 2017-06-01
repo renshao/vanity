@@ -54,20 +54,29 @@ module Vanity
   def self.context=(context)
     Thread.current[:vanity_context] = context
 
-    if context
-      context.class.send(:define_method, :vanity_add_to_active_experiments) do |name, alternative|
-        @_vanity_experiments ||= {}
-        @_vanity_experiments[name] ||= alternative
-        @_vanity_experiments[name].value
-      end
-      context.class.send(:alias_method, :vanity_store_experiment_for_js, :vanity_add_to_active_experiments)
+    # if context
+    #   context.class.send(:define_method, :vanity_add_to_active_experiments) do |name, alternative|
+    #     @_vanity_experiments ||= {}
+    #     @_vanity_experiments[name] ||= alternative
+    #     @_vanity_experiments[name].value
+    #   end
+    #   context.class.send(:alias_method, :vanity_store_experiment_for_js, :vanity_add_to_active_experiments)
 
-      context.class.send(:define_method, :vanity_active_experiments) do
-        @_vanity_experiments ||= {}
-      end
-    end
+    #   context.class.send(:define_method, :vanity_active_experiments) do
+    #     @_vanity_experiments ||= {}
+    #   end
+    # end
 
-    context
+    # context
+  end
+
+  def self.add_to_active_experiments(name, alternative)
+    self.active_experiments[name] = alternative
+    alternative.value
+  end
+
+  def self.active_experiments
+    Thread.current[:vanity_active_experiments] ||= {}
   end
 
   #

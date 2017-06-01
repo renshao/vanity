@@ -290,7 +290,7 @@ module Vanity
       def vanity_experiments
         edit_safe_experiments = {}
 
-        Vanity.context.vanity_active_experiments.each do |name, alternative|
+        Vanity.active_experiments.each do |name, alternative|
           edit_safe_experiments[name] = alternative.clone
         end
 

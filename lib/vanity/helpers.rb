@@ -36,7 +36,7 @@ module Vanity
       request ||= Vanity.context.respond_to?(:request) ? Vanity.context.request : nil
 
       alternative = Vanity.playground.experiment(name).choose(request)
-      Vanity.context.vanity_add_to_active_experiments(name, alternative)
+      Vanity.add_to_active_experiments(name, alternative)
 
       Vanity.logger.warn("Deprecated: This method used to accept a block, however, calling it with a block would result in an exception. The block will be removed from the signature in an upcoming version.") if block
 
