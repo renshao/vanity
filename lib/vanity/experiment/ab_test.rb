@@ -191,6 +191,7 @@ module Vanity
             if enabled?
               return assignment_for_identity(request)
             else
+              Metrics::Statsd.increment("debug.vanity.not_enabled")
               # Show the default if experiment is disabled.
               return default
             end
@@ -585,8 +586,10 @@ module Vanity
       def assignment_for_identity(request)
         identity = identity()
         if filter_visitor?(request, identity)
+          Metrics::Statsd.increment("debug.vanity.filter_visitor")
           default
         else
+          Metrics::Statsd.increment("debug.vanity.normal_ab_call")
           index = connection.ab_showing(@id, identity) || connection.ab_assigned(@id, identity)
           unless index
             index = alternative_for(identity).to_i
